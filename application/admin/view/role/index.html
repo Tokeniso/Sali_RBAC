@@ -1,0 +1,64 @@
+{extend name="base/layouts" /}
+
+{block name="content"}
+<div class="">
+    <div class="layui-row  layui-col-space10" style="margin:0 10px;">
+        {include file="base/page-btns" /}
+        <div class="layui-col-xs12">
+            <table id="list"  lay-filter="list"></table>
+        </div>
+    </div>
+</div>
+{include file="base/page-actions" /}
+
+{/block}
+{block name="js"}
+
+<script>
+    layui.use(['form', 'element','layedit', 'jquery','table'], function() {
+        var $ = layui.jquery
+                ,table = layui.table;
+        var data = {$list|raw};
+        table.render({
+            elem: '#list'
+            ,id:'url'
+            ,data: data
+            ,height: 'full'
+            ,limit: 30000
+            ,cols: [[
+                {field: 'id', title: 'ID', align:'center',width: 80}
+                ,{field: 'name', title: '名称',align:'left', width: 200}
+                ,{field: 'remark', title: '备注',align:'center', width: 380}
+                ,{field:'actions',title: '操作',toolbar: '#tool',align:'left',width:360}
+            ]]
+            ,skin: 'row' //表格风格
+            ,even: true
+        });
+
+        table.on('tool(list)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if(layEvent === 'delete'){ //删除
+                layer.confirm('真的删除【'+ data.name +'】么', function(index){
+                    $.post("{:url('role/delete')}?id="+data.id,function(res){
+                        var data = JSON.parse(res);
+                        if(data.code == true){
+                            obj.del();
+                        }
+                        layer.msg(data.info);
+                    })
+                });
+            }
+            else if(layEvent === 'edit'){ //编辑
+                location.href = "{:url('role/add')}?id="+data.id;
+            }
+            else if(layEvent === 'setMap'){ //设置权限
+                location.href = "{:url('role/setMap')}?id="+data.id;
+            }
+        });
+
+    })
+</script>
+{/block}

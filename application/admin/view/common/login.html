@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{__NOLAYOUT__}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台管理</title>
+    {css href="__JS__/layui/css/layui.css" /}
+
+    {js href="__JS__/layui/layui.all.js" /}
+
+    {js href="__JS__/md5.js" /}
+</head>
+<body>
+<div class="wrap" style="position:absolute;width:100%;height:100%;">
+    <div class="mainfrm" style="position:relative;margin:0 auto;top:50%;margin-top:-180px;border:10px solid #efefef;width:360px;height:300px;padding:30px 0 0 20px;">
+        <div class="layui-row  layui-col-space10" style="margin:0 10px;">
+            <div class="layui-col-xs12" style="width:320px;">
+                <form class="layui-form layui-form-pane" lay-filter="form" action="">
+                    {:token('__token__', 'sha1')}
+                    <div class="layui-form-item" style="text-align: center">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="phone" value="" autocomplete="off" placeholder="请输入登录名" lay-verify="required" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="text-align: center">
+                        <label class="layui-form-label">登录密码</label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="pass" value="" placeholder="请输入密码" autocomplete="off" lay-verify="required" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="text-align: center">
+                        <label class="layui-form-label">验证码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="verify" value="" placeholder="请输入验证码" autocomplete="off" lay-verify="required" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="text-align: center">
+                        <div style="display: flex;align-items: center">
+                            <img id="verify-img" data-role="load-verify" src="{:captcha_src()}" width="160px" height="40px"/>
+                            <a href="javascript:;" data-role="load-verify" style="margin-left: 20px;">看不清？换一张</a>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="text-align: center;margin-top:30px;">
+                        <button class="layui-btn" lay-submit lay-filter="form" style="width:140px;">登录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layedit', 'jquery'], function(){
+        var form = layui.form
+                ,layer = layui.layer
+                ,$ = layui.jquery
+                ;
+
+        /**
+         * 监听提交
+         */
+        form.on('submit(form)', function(data){
+            var url=document.URL;
+            var pwd = data.field['pass'];
+
+            if(pwd.length==0){
+                layer.msg('密码不能为空');
+                return false;
+            }
+            //md5加密密码
+            data.field['pass'] = hex_md5(pwd + '_glasses');
+
+            $.post(url, data.field, function(res){
+                var data = JSON.parse(res);
+                layer.msg(data.info);
+                if(data.url && data.url != ''){
+                    setTimeout(function(){
+                        location.href = data.url;
+                    },2000);
+                }
+                if(data.url == ''){
+                    console.log('验证失败');
+                    setTimeout(function(){
+                        // location.reload();
+                    },1000);
+                }
+            });
+            return false;
+        });
+
+        /**
+         * 获取验证码
+         */
+        $('[data-role="load-verify"]').click(function () {
+            var url = "{:url('admin/common/verify')}";
+            $.post(url,{},function(res){
+                var data = JSON.parse(res);
+                if(data.url && data.url != ''){
+                    $('#verify-img').attr('src', data.url);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -16,7 +16,7 @@
 return [
     // 模板引擎类型 支持 php think 支持扩展
     'type'         => 'Think',
-    // 默认模板渲染规则 1 解析为小写+下划线 2 全部转换小写
+    // 默认模板渲染规则 1 解析为小写+下划线 2 全部转换小写 3 保持操作方法
     'auto_rule'    => 1,
     // 模板路径
     'view_path'    => '',
@@ -32,4 +32,10 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    // 视图输出字符串内容替换
+    'tpl_replace_string' => [
+        '__CSS__' => '/static/admin/css', // CSS文件目录
+        '__JS__' => '/static/admin/js', // JS文件目录
+        '__IMG__' => '/static/admin/images', // 图片文件目录
+    ],
 ];

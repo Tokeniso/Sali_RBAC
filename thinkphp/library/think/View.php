@@ -45,6 +45,7 @@ class View
      */
     public function init($engine = [])
     {
+
         // 初始化模板引擎
         $this->engine($engine);
 

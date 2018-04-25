@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+
+    {css href="//at.alicdn.com/t/font_635167_emfejwxyz625u3di.css" /}
+
+    {css href="__CSS__/admin-page.css" /}
+
+    {css href="__JS__/layui/css/layui.css" /}
+
+    {block name="css"}{/block}
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo gl-admin-logo"><i class="iconfont icon-chengzi gl-icon"></i> 云邻</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        {include file="base/_top-nav" /}
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="{$admin.avatar}" class="layui-nav-img">
+                    {$admin.name}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a data-role="clear_cache" href="javascript:;">清除缓存</a></li>
+            <li class="layui-nav-item"><a data-role="logout" href="javascript:;">退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file="base/_left-nav" /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 80px;">
+            {block name="content"}{/block}
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © 云邻 - <i class="iconfont icon-chengzi"></i>
+    </div>
+</div>
+
+{js href="__JS__/layui/layui.all.js" /}
+
+<script>
+    //规定表单提交中，禁用提交
+    var formFlag = false;
+    layui.use(['form', 'layedit', 'jquery'], function(){
+        var form = layui.form
+                ,layer = layui.layer
+                ,$ = layui.jquery;
+
+        /**
+         * 清空缓存
+         */
+        $('[data-role="clear_cache"]').click(function(){
+            $.post("{:url('common/clearCache')}",function(data){
+                layer.msg('清除成功');
+            })
+        });
+
+        /**
+         * 退出登录
+         */
+        $('[data-role="logout"]').click(function(){
+            $.post("{:url('common/logout')}",function(res){
+                layer.msg('退出登录',function(){
+                    location.href = res.url;
+                })
+            })
+        });
+
+        /**
+         * 监听表单提交
+         */
+        form.on('submit(form)', function(data){
+            if($(data.form).attr('data-role') == 'to-url'){
+                //直接跳转表单
+                return true;
+            }
+            //ajax提交表单
+            if(formFlag) return false;//表单提交中，阻止新的提交
+            formFlag = true;
+            //ajax提交至当前页面链接
+            var url=document.URL;
+            //提交
+            var formData = $(data.form).serialize();
+            $.post(url, formData,function(res){
+                var data = JSON.parse(res);
+                layer.msg(data.info);
+                if(data.url && data.url != ''){
+                    setTimeout(function(){
+                        location.href=data.url;
+                    },2000);
+                }else{
+                    formFlag = false;
+                }
+            });
+            return false;
+        });
+    });
+</script>
+<!-- 指定js -->
+{block name="js"}{/block}
+</body>
+</html>

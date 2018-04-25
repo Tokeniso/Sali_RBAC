@@ -169,6 +169,7 @@ class Controller
      */
     protected function engine($engine)
     {
+
         $this->view->engine($engine);
 
         return $this;

@@ -1,0 +1,76 @@
+{extend name="base/layouts" /}
+
+{block name="content"}
+<div class="">
+    <div class="layui-row  layui-col-space10" style="margin:0 10px;">
+        {include file="base/page-btns" /}
+        <div class="layui-col-xs12">
+            <table id="list"  lay-filter="list"></table>
+        </div>
+    </div>
+</div>
+{include file="base/page-actions" /}
+
+{/block}
+{block name="js"}
+<script type="text/html" id="avatar">
+    {{#  if(d.avatar != false){ }}
+    <a href="javascript:pictureHtml('{{d.avatar}}','{{d.avatar}}')">
+        　　<img style="width: 100px;max-height: 100px;" src="{{d.avatar}}" >
+    </a>
+    {{#  } }}
+</script>
+<script src="__JS__/main.js"></script>
+<script>
+    layui.use(['form', 'element','layedit', 'jquery','table'], function() {
+        var $ = layui.jquery
+                ,table = layui.table;
+        var data = {$admins|raw};
+        table.render({
+            elem: '#list'
+            ,id:'url'
+            ,data: data
+            ,height: 'full'
+            ,limit: 30000
+            ,cols: [[
+                {field: 'id', title: 'ID', align:'center',width: 80}
+                ,{field: 'avatar', title: '头像',align:'left', width: 200, templet:"#avatar"}
+                ,{field: 'name', title: '名称',align:'left', width: 120}
+                ,{field: 'role_name', title: '权限组',align:'left', width: 120}
+                ,{field: 'phone', title: '手机号码',align:'left', width: 130}
+                ,{field: 'email', title: '邮箱',align:'left', width: 180}
+                ,{field: 'last_ip', title: '最后登录ip',align:'left', width: 150}
+                ,{field: 'last_login', title: '最后登录时间',align:'left', width: 180}
+                ,{field:'actions',title: '操作',toolbar: '#tool',align:'left',width:300}
+            ]]
+            ,skin: 'row' //表格风格
+            ,even: true
+        });
+
+        table.on('tool(list)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if(layEvent === 'removeAdmin'){ //删除
+                layer.confirm('真的移除【'+ data.name +'】的管理权限吗？', function(index){
+                    $.post("{:url('users/removeAdmin')}?id="+data.id,function(res){
+                        var data = JSON.parse(res);
+                        if(data.code == true){
+                            obj.del();
+                        }
+                        layer.msg(data.info);
+                    })
+                });
+            }
+            else if(layEvent === 'addAdmin'){ //新增
+                location.href = "{:url('users/addAdmin')}?id="+data.id;
+            }
+            else if(layEvent === 'setRole'){ //设置权限组
+                location.href = "{:url('users/setRole')}?id="+data.id;
+            }
+        });
+
+    })
+</script>
+{/block}

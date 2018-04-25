@@ -1,0 +1,57 @@
+{extend name="base/layouts" /}
+{block name="content"}
+<div class="mainfrm">
+    <div class="layui-row  layui-col-space10" style="margin:0 10px;">
+        <div class="layui-col-xs12">
+            <div class="gl-header">
+                {:isset($role['id']) ? '编辑权限组' : '新增权限组'}
+            </div>
+            <form class="layui-form layui-form-pane" lay-filter="form" action="">
+                <input type="hidden" name="form[id]" value="{$role['id'] ?? ''}">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限组名称</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="text" name="form[name]" value="{$role['name'] ?? ''}" autocomplete="off" placeholder="不能为空" lay-verify="required|name" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="text" name="form[remark]" value="{$role['remark'] ?? ''}" autocomplete="off" lay-verify="remark" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    layui.use(['form'], function() {
+        var form = layui.form;
+
+        /**
+         * 检测数据
+         */
+        form.verify({
+            name: function(value){
+                if(value.length < 1 || value.length > 50){
+                    return '权限组名称是1-50个字符';
+                }
+            },
+            remark: function(value){
+                if(value.length > 255){
+                    return '备注是0-255个字符';
+                }
+            }
+        });
+    });
+</script>
+{/block}

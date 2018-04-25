@@ -1,0 +1,10 @@
+<script type="text/html" id="tool">
+    {volist name="actions" id="v"}
+        <a class="layui-btn layui-btn-small {$v['extra']}" lay-event="{$v['url']|basename}">
+            {if condition="$v['icon']"}
+                <span class="iconfont {$v['icon']}"></span>
+            {/if}
+            {$v['name']}
+        </a>
+    {/volist}
+</script>

@@ -1,0 +1,16 @@
+<ul class="layui-nav layui-nav-tree"  lay-filter="test">
+    {foreach $nav as $vo }
+        {if condition="!empty($vo['self'])"}
+            <li class="layui-nav-item {if condition="$vo['show'] ?? false"}layui-nav-itemed{/if}">
+                <a href="{if condition="empty($vo['son']) and !empty($vo['self']['url'])"}{:url($vo['self']['url'])}{else/}javascript:;{/if}">{$vo['self']['name']}</a>
+                {if condition="!empty($vo['son'])"}
+                    <dl class="layui-nav-child">
+                        {foreach $vo['son'] as $son }
+                            <dd><a href="{:url($son['url'])}">{$son.name}</a></dd>
+                        {/foreach}
+                    </dl>
+                {/if}
+            </li>
+        {/if}
+    {/foreach}
+</ul>

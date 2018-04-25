@@ -1,0 +1,11 @@
+<div class="layui-col-xs12">
+    {volist name="buttons" id="v"}
+    <a  {if condition="(empty($v['url']) == false)" }href="{:url($v['url'])}"{/if}
+        class="layui-btn btn_{$v['url']|basename} {$v['extra']}">
+        {if condition="$v['icon']"}
+            <span class="iconfont {$v['icon']}"></span>
+        {/if}
+        {$v['name']}
+    </a>
+    {/volist}
+</div>

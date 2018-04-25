@@ -1,0 +1,113 @@
+{extend name="base/layouts" /}
+{block name="content"}
+<div class="mainfrm">
+    <div class="layui-row  layui-col-space10" style="margin:0 10px;">
+        <div class="layui-col-xs12">
+            <div class="gl-header">
+                {:isset($node['id']) ? '编辑节点' : '新增节点'}
+            </div>
+            <form class="layui-form layui-form-pane" lay-filter="form" action="">
+                <input type="hidden" name="form[id]" value="{$node['id'] ?? ''}">
+                <input type="hidden" name="form[pid]" value="{$node['pid'] ?? ''}">
+                <input type="hidden" name="form[type]" value="{$node['type'] ?? ''}">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">节点名称</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="text" name="form[name]" value="{$node['name'] ?? ''}" autocomplete="off" placeholder="不能为空" lay-verify="required|name" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">节点url</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="text" name="form[url]" value="{$node['url'] ?? ''}" autocomplete="off" placeholder="不能为空" lay-verify="url" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">显示排序</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="text" name="form[sort]" value="{$node['sort'] ?? '50'}" autocomplete="off" lay-verify="sort" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">控件属性</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="text" name="form[extra]" value="{$node['extra'] ?? ''}" autocomplete="off" placeholder="layui按钮样式：layui-btn-danger" lay-verify="extra" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">显示图标</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="text" name="form[icon]" value="{$node['icon'] ?? ''}" autocomplete="off" placeholder="阿里矢量图库：icon-chengzi" lay-verify="icon" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">显示状态</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="radio" name="form[show]" value="1" title="显示"
+                               {if condition="isset($node['show']) && $node['show'] === 1"} checked {/if}
+                        {if condition="!isset($node['show'])"} checked {/if}>
+                        <input type="radio" name="form[show]" value="0" title="隐藏"
+                               {if condition="isset($node['show']) && $node['show'] === 0"} checked {/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">访问属性</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="radio" name="form[auth]" value="0" title="依赖权限"
+                            {if condition="isset($node['auth']) && $node['auth'] === 0"} checked {/if}
+                            {if condition="!isset($node['auth'])"} checked {/if}>
+                        <input type="radio" name="form[auth]" value="1" title="公共访问"
+                        {if condition="isset($node['auth']) && $node['auth'] === 1"} checked {/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    layui.use(['form'], function() {
+        var form = layui.form;
+
+
+        /**
+         * 检测数据
+         */
+        form.verify({
+            name: function(value){
+                if(value.length < 1 || value.length > 20){
+                    return '节点名称是1-20个字符';
+                }
+            },
+            url: function(value){
+                if(value.length > 50){
+                    return '节点url是0-50个字符';
+                }
+            },
+            icon: function(value){
+                if(value.length > 20){
+                    return '节点图标是0-20个字符';
+                }
+            },
+            sort: function(value){
+                if(value.length > 5){
+                    return '节点排序是0-5个字符';
+                }
+            },
+            extra: function(value){
+                if(value.length > 50){
+                    return '控件属性是0-50个字符';
+                }
+            },
+        });
+    });
+</script>
+{/block}
