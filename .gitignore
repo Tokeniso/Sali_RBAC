@@ -3,4 +3,5 @@
 /vendor
 *.log
 thinkphp
+composer.lock
 .env
