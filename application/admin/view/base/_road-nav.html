@@ -1,7 +1,9 @@
 <!-- 后台页面节点路径导航 -->
 <div class="gl-road-nav">
     {volist name="road_nav" id="vo"}
-        {if condition="($i gt 1) and (count($road_nav) > 1)"}<span class="gl-road-tips"> > </span>{/if}
+        {if condition="($i gt 1) and (count($road_nav) > 1)"}
+            <span class="gl-road-tips">  <i class="iconfont icon-shuangjiantou"></i>  </span>
+        {/if}
         {if condition="$vo['url_show']"}
             <a href="{:url($vo['url'])}">{$vo.name}</a>
         {else/}
