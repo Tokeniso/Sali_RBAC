@@ -30,6 +30,11 @@ class Admin extends Common {
         if(empty($node))
             $this->error('没有权限');
 
+        //获取节点路径
+        $road_nav = Node::getNodeRoad($node['pid']);
+        $node['url_show'] = false;
+        $road_nav[] = $node;
+        //权限组允许节点
         $allowAccess = Map::getAllowNode($role_id, $this->user['id']);
 
         //没有权限，跳转至无权限
@@ -44,6 +49,7 @@ class Admin extends Common {
         $this->assign('buttons', $buttons);
         $this->assign('actions', $actions);
         $this->assign('nav', $nav);
+        $this->assign('road_nav', $road_nav);
         $this->assign('admin', $this->user);
     }
 

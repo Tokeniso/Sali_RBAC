@@ -215,4 +215,39 @@ class Node extends Model {
         return $data;
     }
 
+
+    /**
+     * 获取当前节点的父级导航路径
+     * @param $id
+     * @return array
+     * @author szh
+     */
+    public static function getNodeRoad($id){
+        $road = [];
+        $node = self::getNodeById($id);
+        if(!empty($node)){
+            if($node['pid'] === 0){
+                $node['url_show'] = false;
+                $road[] = $node;
+            } else {
+                $node['url_show'] = true;
+                $father = self::getNodeById($node['pid']);
+                if(empty($father)){
+                    $node['url_show'] = false;
+                    $road[] = $node;
+                } else {
+                    $old = self::getNodeRoad($father['pid']);
+                    if($old){
+                        $road[] = $old;
+                    }else{
+                        $father['url_show'] = false;
+                        $road[] = $father;
+                    }
+                    $road[] = $node;
+                }
+            }
+        }
+        return $road;
+    }
+
 }
