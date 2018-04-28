@@ -108,16 +108,16 @@
                 });
             }
             else if(layEvent === 'edit'){ //编辑
-                location.href = "{:url('node/add')}?id="+data.id;
+                location.href = "{:url('node/edit')}?id="+data.id;
             }
             else if(layEvent === 'addNav'){
-                location.href = "{:url('node/add')}?id="+data.id+"&type=addNav";
+                location.href = "{:url('node/addNav')}?id="+data.id+"&type=addNav";
             }
             else if(layEvent === 'addBtn'){
-                location.href = "{:url('node/add')}?id="+data.id+"&type=addBtn";
+                location.href = "{:url('node/addBtn')}?id="+data.id+"&type=addBtn";
             }
             else if(layEvent === 'addAct'){
-                location.href = "{:url('node/add')}?id="+data.id+"&type=addAct";
+                location.href = "{:url('node/addAct')}?id="+data.id+"&type=addAct";
             }
         });
 

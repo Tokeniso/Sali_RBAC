@@ -26,11 +26,38 @@ class Role extends Admin {
     }
 
     /**
-     * 编辑、新增权限组
+     * 新增权限组
      * @return mixed
      * @author szh
      */
     public function add(){
+        $this->roleAjax('add');
+        return $this->fetch('role/add');
+    }
+
+    /**
+     * 编辑权限组
+     * @return mixed
+     * @author szh
+     */
+    public function edit(){
+        $this->roleAjax('edit');
+        $id = input('get.id/d', 0);
+
+        $role = RoleModel::getRoleById($id);
+        if(empty($role))
+            $this->error('错误的ID');
+        $this->assign('role', $role);
+
+        return $this->fetch('role/add');
+    }
+
+    /**
+     * 用于节点控制时，区分新增、编辑功能节点权限
+     * @param string $type  传入访问的节点-方法名
+     * @author szh
+     */
+    private function roleAjax($type = 'add'){
         if(request()->isAjax()){
             $roleModel = new RoleModel();
             $data = input('form/a', [], 'text');
@@ -41,24 +68,19 @@ class Role extends Admin {
                 $this->ajaxError('权限组备注是0-255个字符');
             $name = '新增';
             if($id){
+                if($type !== 'edit')
+                    $this->ajaxError('越权操作');
                 $name = '编辑';
                 $res = $roleModel->where('id', $id)->update($data);
             } else {
+                if($type !== 'add')
+                    $this->ajaxError('越权操作');
                 $res = $roleModel->insertGetId($data);
             }
             if(!$res)
                 $this->ajaxError($roleModel->getError() ??  $name . '失败');
             $this->ajaxSuccess($name . '成功', url('role/index'));
         }
-        $id = input('get.id/d', 0);
-
-        if(!empty($id)){
-            $role = RoleModel::getRoleById($id);
-            if(empty($role))
-                $this->error('错误的ID');
-            $this->assign('role', $role);
-        }
-        return $this->fetch();
     }
 
     /**
