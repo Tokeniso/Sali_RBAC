@@ -145,7 +145,7 @@ class Role extends Admin {
 
         //需要授权的节点
         $nodes = Node::getChildList(0, 0, true, 0, 'list');
-
+        $nodes = node_deep_sort($nodes, 'list');
         $nodes = Node::listToTree($nodes, $hasNode);
         $this->assign('list', json_encode($nodes));
         $this->assign('role', $role);

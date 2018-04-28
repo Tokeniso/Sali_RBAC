@@ -141,18 +141,18 @@ function get_pic_url($id){
  * @param $array
  * @param string $child
  * @param string $key
- * @param int $sort
+ * @return mixed
  * @author szh
  */
-function node_deep_sort(&$array, $child = '', $key = 'sort', $sort = SORT_DESC){
+function node_deep_sort($array, $child = '', $key = 'sort'){
     if(count($array) > 1){
         $keys = array_column($array, $key);
         if($keys)
-            array_multisort($keys, $sort, $array);
+            array_multisort($keys, SORT_DESC, SORT_NUMERIC, $array);
     }
-    foreach ($array as &$value){
+    foreach ($array as $key => $value){
         if(isset($value[$child]))
-            node_deep_sort($value[$child], $child, $key, $sort);
+            $array[$key][$child] = node_deep_sort($value[$child], $child, $key);
     }
-    unset($value);
+    return $array;
 }

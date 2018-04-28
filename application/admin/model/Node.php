@@ -150,9 +150,9 @@ class Node extends Model {
             }
         }
         //排序
-        node_deep_sort($father, 'son');
-        node_deep_sort($action);
-        node_deep_sort($button);
+        $father = node_deep_sort($father, 'son');
+        $action = node_deep_sort($action);
+        $button = node_deep_sort($button);
         return [$father, $action, $button];
     }
 
