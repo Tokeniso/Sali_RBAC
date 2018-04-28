@@ -144,11 +144,9 @@ class Role extends Admin {
         $hasNode = Map::getRoleNode($id);
 
         //需要授权的节点
-        $nodes = Node::getAuthNode(0);
+        $nodes = Node::getChildList(0, 0, true, 0, 'list');
 
-        $nodes = Node::where('id', 'in', $nodes)->select();
-        $nodes = $nodes->toArray();
-        $nodes = Node::listToTree($nodes, 0, $hasNode);
+        $nodes = Node::listToTree($nodes, $hasNode);
         $this->assign('list', json_encode($nodes));
         $this->assign('role', $role);
 

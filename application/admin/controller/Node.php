@@ -25,12 +25,9 @@ class Node extends Admin {
      * @author szh
      */
     public function index(){
+
         //获取所有节点
-        $list = NodeModel::getNodeList();
-        //节点转树状图
-        $list = NodeModel::listToTree($list);
-        //节点树状图转列表
-        $list = NodeModel::treeToList($list);
+        $list = NodeModel::getChildList(0, null, true, 0);
 
         $this->assign('list', json_encode($list));
 
@@ -166,15 +163,15 @@ class Node extends Admin {
             }
             if(!$res)
                 $this->ajaxError($nodeModel->getError() ?? $name . '失败');
+            $pid = $data['pid'] ?? 0;
             if($data['id']){
                 if($data['auth'] !== $node['auth'])
-                    cache('public_node_list_' . $data['auth'], null);
+                    cache('node_pid_'.$pid.'_auth_' . $data['auth'], null);
 
                 cache('node_url_' . $node['url'], null);
                 cache('node_id_' . $data['id'], null);
             } else {
-                cache('public_node_list_' . $data['auth'], null);
-                cache('node_all_id', null);
+                cache('node_pid_'.$pid.'_auth_' . $data['auth'], null);
             }
             $this->ajaxSuccess($name . '成功', url('node/index'));
         }

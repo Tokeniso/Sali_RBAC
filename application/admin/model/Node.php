@@ -13,20 +13,62 @@ class Node extends Model {
 
     protected $name = 'admin_node';
 
+
     /**
-     * 获取公共、依赖授权节点
-     * @param int $auth  1为公开节点，0依赖权限节点
+     * 获取某一父类下的所有子节点的数据列表
+     * @param int $pid       父类id
+     * @param null $auth    【null】全部节点 【1】公开的节点 【0】依赖权限组的节点
+     * @param bool $data    【false】只需要节点的id 【true】需要节点的所有数据
+     * @param int $deep      子类树状深度 【0】当前子类为顶级分类
+     * @param string $tree   需要树状结构的数据  【$tree】父类下子类的字段名称
      * @return array
      * @author szh
      */
-    public static function getAuthNode($auth=1) : array {
-        $tag = 'public_node_list_' . $auth;
-        $node = cache($tag);
-        if($node === false){
-            $node = self::where('auth', $auth)->column('id');
-            cache($tag, $node);
+    public static function getChildList($pid = 0, $auth = null, $data = false, $deep = 0, $tree = ''){
+        //获取当前条件的所有列表
+        $tag = 'node_pid_'.$pid.'_auth_' . $auth;
+        $list = cache($tag);
+        if($list === false){
+            $map[] = ['pid', 'eq', $pid];
+            //全部节点、公开的节点、依赖权限组的节点
+            if(in_array($auth, [0, 1], true))
+                $map[] = ['auth', 'eq', $auth];
+            $list = self::where($map)->order('sort desc')->column('id');
+            cache($tag, $list);
         }
-        return $node ? $node : [];
+        $lists = [];
+        if($list){
+            //递归查找子节点
+            foreach($list as $key => $id){
+                //【false】只需要节点的id 【true】需要节点的所有数据
+                if($data){
+                    //获取所有数据
+                    $list[$key] = self::getNodeById($id);
+                    $pre = '';
+                    if($deep > 0){
+                        for($i=0;$i<$deep;$i++)
+                            $pre .='　　';
+                        $pre .= '|——';
+                    }
+                    //拼接树状结构的前缀
+                    $list[$key]['pre'] = $pre;
+                }
+                //推进返回结果集中
+                $lists[$id] = $list[$key];
+                //查找所有子类
+                $child = self::getChildList($id, $auth, $data, $deep+1, $tree);
+                //推进返回结果集中
+                if($child){
+                    //需要树状结构的数据
+                    if($tree)
+                        $lists[$id][$tree] = $child;
+                    else
+                        $lists = array_merge($lists, $child);
+                }
+            }
+        }
+        //返回结果集
+        return $lists;
     }
 
     /**
@@ -59,16 +101,6 @@ class Node extends Model {
             cache($tag, $node);
         }
         return $node ? $node : [];
-    }
-
-    /**
-     * 获取所有列表节点
-     * @return array|mixed|\PDOStatement|string|\think\Collection
-     * @author szh
-     */
-    public static function getNodeList() {
-        $list = self::field(true)->order('sort desc')->select();
-        return $list ? $list : [];
     }
 
     /**
@@ -159,62 +191,22 @@ class Node extends Model {
     /**
      * 节点列表生成树状名称
      * @param $list
-     * @param int $pid
-     * @param bool $checked
+     * @param  array  $checked
      * @return array
      * @author szh
      */
-    public static function listToTree($list, $pid = 0, $checked = false) {
-        $data = [];
-        foreach ($list as $key => $value) {
-            if($value['pid'] === $pid){
-                $child = self::listToTree($list, $value['id'], $checked);
-                if($child)
-                    $value['list'] = $child;
-                if(is_array($checked)){
-                    $value['value'] = $value['id'];
-                    $value['checked'] = in_array($value['id'], $checked);
-                }
-                $data[] = $value;
+    public static function listToTree($list, $checked) {
+        if($list && is_array($list)){
+            foreach ($list as $key => $value) {
+                $list[$key]['value'] = $value['id'];
+                if($checked && is_array($checked))
+                    $list[$key]['checked'] = in_array($value['id'], $checked);
+                if(isset($list[$key]['list']))
+                    $list[$key]['list'] = self::listToTree($list[$key]['list'], $checked);
             }
         }
-        return $data;
+        return $list;
     }
-
-    /**
-     * 树状图转列表
-     * @param $array
-     * @param int $deep
-     * @return array
-     * @author szh
-     */
-    public static function treeToList($array, $deep = 0){
-        $data = [];
-        foreach ($array as $key => $value){
-            if($deep === 0 && $value['pid'] > 0)
-                continue;
-
-            $pre = '';
-            if($deep > 0){
-                for($i=0;$i<$deep;$i++)
-                    $pre .='　　';
-                $pre .= '|——';
-            }
-            $value['pre'] = $pre;
-
-            if(isset($value['list'])){
-                $child = self::treeToList($value['list'], $deep+1);
-                unset($value['list']);
-                $data[] = $value;
-                if($child)
-                    $data = array_merge($data, $child);
-            }else{
-                $data[] = $value;
-            }
-        }
-        return $data;
-    }
-
 
     /**
      * 获取当前节点的父级导航路径

@@ -46,6 +46,7 @@ class Admin extends Common {
         //查找展示导航，按钮，操作
         list($nav, $actions, $buttons) = Node::showNodes($allowAccess, $fId, $node['id']);
 
+        $this->assign('seo', $node);
         $this->assign('buttons', $buttons);
         $this->assign('actions', $actions);
         $this->assign('nav', $nav);

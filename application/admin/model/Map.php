@@ -30,7 +30,7 @@ class Map extends Model {
         //用户自定义节点
         $userNode = self::getUserNode($uid);
         //公共节点
-        $public = Node::getAuthNode();
+        $public = Node::getChildList(0, 1);
 
         return array_merge($roleNode, $userNode, $public);
     }
