@@ -25,13 +25,42 @@ class Node extends Admin {
      * @author szh
      */
     public function index(){
+        if(request()->isAjax()){
+            $id = input('id/d', 0);
+            if(!empty($id)){
+                $sonNodes = NodeModel::getChildList([$id, false], null, true);
+                if(!empty($sonNodes)){
+                    $sonNodes = array_merge($sonNodes);
+                    $this->ajaxSuccess($sonNodes);
+                }
+            }
+            $this->ajaxError('错误的ID');
+        }
+        $tId = input('tId/d', 0);//顶级节点
+        $sId = input('sId/d', 0);//顶级节点下的子节点
 
-        //获取所有节点
-        $list = NodeModel::getChildList(0, null, true, 0);
+        //获取节点
+        $sonNodes = [];
+        if(!empty($sId)){
+            //有子搜索选项
+            $list = NodeModel::getChildList($sId, null, true);
+        } else {
+            //某一节点下的子节点
+            $list = NodeModel::getChildList($tId, null, true);
+        }
+        //搜索顶级节点，展示搜索的子节点
+        if(!empty($tId))
+            $sonNodes = NodeModel::getChildList([$tId, false], null, true);
 
         $list = array_merge($list);
+        //用于搜索的顶级节点
+        $topNodes = NodeModel::getChildList([0, false], null, true);
 
-        $this->assign('list', json_encode($list));
+        $this->assign('list', json_encode($list));//展示的列表
+        $this->assign('topNodes', $topNodes);//搜索的顶级节点
+        $this->assign('sonNodes', $sonNodes);//搜索的子节点
+        $this->assign('tId', $tId);//当前搜索的顶级节点id
+        $this->assign('sId', $sId);//当前搜索的子节点id
 
         return $this->fetch();
     }

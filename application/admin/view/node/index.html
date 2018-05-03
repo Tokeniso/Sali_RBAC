@@ -5,6 +5,26 @@
     <div class="layui-row  layui-col-space10" style="margin:0 10px;">
         {include file="base/page-btns" /}
         <div class="layui-col-xs12">
+            <form class="layui-form layui-form-pane" action="{:url('node/index')}" method="post" data-role="to-url">
+                <label class="layui-form-label">筛选：</label>
+                <div class="layui-input-inline" style="width:200px;">
+                    <select lay-filter="topNode" name="tId" class="layui-select">
+                        <option value="0">— 选择菜单</option>
+                        {volist name="topNodes" id="vo"}
+                            <option value="{$vo.id}" {if condition="$vo.id eq $tId"}selected{/if}>　|— {$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="layui-input-inline layui-form" style="width:200px;" lay-filter="sonNode">
+                    <select data-role="sonNode" name="sId" class="layui-select">
+                        <option value="0">— 选择子菜单</option>
+                        {volist name="sonNodes" id="vo"}
+                        <option value="{$vo.id}" {if condition="$vo.id eq $sId"}selected{/if}>　|— {$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <button class="layui-btn" data-role="allow-identify" lay-submit lay-filter="form">搜索</button>
+            </form>
             <table id="list"  lay-filter="list"></table>
         </div>
     </div>
@@ -48,9 +68,10 @@
     {{#  } }}
 </script>
 <script>
-    layui.use(['form', 'element','layedit', 'jquery','table'], function() {
+    layui.use(['form', 'jquery','table'], function() {
         var $ = layui.jquery
-                ,table = layui.table;
+                ,table = layui.table
+                ,form = layui.form;
         var data = {$list|raw};
         table.render({
             elem: '#list'
@@ -121,6 +142,23 @@
             }
         });
 
+        /**
+         * 选取顶级节点，获取节点下的子节点
+         */
+        form.on('select(topNode)', function (data){
+            $.post("{:url('node/index')}", {id:data.value}, function(res){
+                var data = JSON.parse(res);
+                if(data.code){
+                    var box = $('[data-role="sonNode"]');
+                    var len = data.data.length;
+                    console.log(data.data);
+                    for( var i = 0; i < len; i++){
+                        box.append('<option value="'+data.data[i].id+'">　|—'+data.data[i].name+'</option>')
+                    }
+                    form.render('select', 'sonNode');
+                }
+            });
+        });
     })
 </script>
 {/block}

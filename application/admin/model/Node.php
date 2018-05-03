@@ -16,7 +16,7 @@ class Node extends Model {
 
     /**
      * 获取某一父类下的所有子节点的数据列表
-     * @param int $pid       父类id
+     * @param int|array $pid       父类id
      * @param null $auth    【null】全部节点 【1】公开的节点 【0】依赖权限组的节点
      * @param bool $data    【false】只需要节点的id 【true】需要节点的所有数据
      * @param int $deep      子类树状深度 【0】当前子类为顶级分类
@@ -26,6 +26,16 @@ class Node extends Model {
      */
     public static function getChildList($pid = 0, $auth = null, $data = false, $deep = 0, $tree = ''){
         //获取当前条件的所有列表
+        $needChildren = true;
+        // array 只取当前分类下的子分类
+        if(is_array($pid)){
+            if(isset($pid[0]) && is_numeric($pid[0])){
+                $needChildren = $pid[1] ?? true;
+                $pid = $pid[0];
+            }else{
+                $pid = 0;
+            }
+        }
         $tag = 'node_pid_'.$pid.'_auth_' . $auth;
         $list = cache($tag);
         if($list === false){
@@ -55,15 +65,17 @@ class Node extends Model {
                 }
                 //推进返回结果集中
                 $lists[$id] = $list[$key];
-                //查找所有子类
-                $child = self::getChildList($id, $auth, $data, $deep+1, $tree);
-                //推进返回结果集中
-                if($child){
-                    //需要树状结构的数据
-                    if($tree)
-                        $lists[$id][$tree] = $child;
-                    else
-                        $lists = array_merge($lists, $child);
+                if($needChildren){
+                    //查找所有子类
+                    $child = self::getChildList($id, $auth, $data, $deep+1, $tree);
+                    //推进返回结果集中
+                    if($child){
+                        //需要树状结构的数据
+                        if($tree)
+                            $lists[$id][$tree] = $child;
+                        else
+                            $lists = array_merge($lists, $child);
+                    }
                 }
             }
         }
