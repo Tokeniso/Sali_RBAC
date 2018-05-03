@@ -29,6 +29,8 @@ class Node extends Admin {
         //获取所有节点
         $list = NodeModel::getChildList(0, null, true, 0);
 
+        $list = array_merge($list);
+
         $this->assign('list', json_encode($list));
 
         return $this->fetch();
@@ -163,14 +165,17 @@ class Node extends Admin {
             }
             if(!$res)
                 $this->ajaxError($nodeModel->getError() ?? $name . '失败');
-            $pid = $data['pid'] ?? 0;
+            $pid = isset($data['pid']) && is_numeric($data['pid']) ? $data['pid'] : 0;
+            $data['auth'] = $data['auth'] ?? 0;
             if($data['id']){
-                if($data['auth'] !== $node['auth'])
+                if($data['auth'] != $node['auth']){
                     cache('node_pid_'.$pid.'_auth_' . $data['auth'], null);
-
+                    cache('node_pid_'.$pid.'_auth_' . $node['auth'], null);
+                }
                 cache('node_url_' . $node['url'], null);
                 cache('node_id_' . $data['id'], null);
             } else {
+                cache('node_pid_'.$pid.'_auth_', null);
                 cache('node_pid_'.$pid.'_auth_' . $data['auth'], null);
             }
             $this->ajaxSuccess($name . '成功', url('node/index'));
@@ -223,9 +228,10 @@ class Node extends Admin {
         $res = NodeModel::where('id', $id)->delete();
         if(!$res)
             $this->ajaxError('删除失败');
+        cache('node_pid_'.$node['pid'].'_auth_', null);
+        cache('node_pid_'.$node['pid'].'_auth_' . $node['auth'], null);
         cache('node_url_' . $node['url'], null);
         cache('node_id_' . $id, null);
-        cache('node_all_id', null);
         $this->ajaxSuccess('删除成功');
     }
 }

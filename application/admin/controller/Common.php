@@ -19,51 +19,6 @@ class Common extends Base{
     }
 
     /**
-     * ajax返回信息
-     * @param $code
-     * @param $info
-     * @param $data
-     * @param $url
-     * @author szh
-     */
-    public function ajaxReturn($code, $info, $data, $url){
-        if(!is_array($data) && empty($url)){
-            $url = $data;
-            $data = [];
-        }
-        $return = [
-            'code' => $code,
-            'info' => $info,
-            'data' => $data,
-            'url' => $url,
-        ];
-        echo json_encode($return);
-        exit;
-    }
-
-    /**
-     * ajax成功返回
-     * @param string $info
-     * @param $data
-     * @param $url
-     * @author szh
-     */
-    public function ajaxSuccess($info = '操作成功', $data=[], $url=''){
-        $this->ajaxReturn(1, $info, $data, $url);
-    }
-
-    /**
-     * ajax失败返回
-     * @param string $info
-     * @param $data
-     * @param $url
-     * @author szh
-     */
-    public function ajaxError($info = '操作失败', $data=[], $url=''){
-        $this->ajaxReturn(0, $info, $data, $url);
-    }
-
-    /**
      * 清空数据缓存
      * @author szh
      */

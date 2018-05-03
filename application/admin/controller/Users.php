@@ -26,7 +26,7 @@ class Users extends Admin {
         if($admins){
             foreach ($admins as &$user) {
                 $user = query_user('id,name,avatar,role_id,last_ip,last_login,phone,email', $user);
-                $user['last_login'] = friendlyDate($user['last_login'], 'full');
+                $user['last_login'] = friendly_date($user['last_login'], 'full');
                 $role = Role::getRoleById($user['role_id']);
                 $user['role_name'] = $role['name'] ?? '未定义';
             }

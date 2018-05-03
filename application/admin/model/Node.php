@@ -156,20 +156,6 @@ class Node extends Model {
         return [$father, $action, $button];
     }
 
-    /**
-     * 获取所有节点
-     * @return array|mixed|\PDOStatement|string|\think\Collection
-     * @author szh
-     */
-    public static function getAllNode(){
-        $tag = 'node_all_id';
-        $nodes = cache($tag);
-        if($nodes === false){
-            $nodes = self::field(true)->column('id');
-            cache($tag, $nodes);
-        }
-        return $nodes ? $nodes : [];
-    }
 
     /**
      * 查找最顶级导航id

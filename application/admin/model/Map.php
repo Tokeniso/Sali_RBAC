@@ -23,7 +23,7 @@ class Map extends Model {
      */
     public static function getAllowNode($role_id, $uid) : array {
         if($role_id === 1)
-            return Node::getAllNode();
+            return Node::getChildList();
 
         //权限组节点
         $roleNode = self::getRoleNode($role_id);

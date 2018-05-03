@@ -34,3 +34,22 @@
   font-size: 16px;
   border-bottom: 1px solid #e5e5e5;
 }
+.gl-picture-upload {
+  display: none;
+  position: relative;
+  align-items: flex-end;
+  width: 100px;
+}
+.gl-picture-upload .gl-picture-remove {
+  margin: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+  border-radius: 50%;
+  background-color: #999999;
+  opacity: .5;
+}
+.gl-picture-upload .gl-picture-remove:hover {
+  opacity: 1;
+}

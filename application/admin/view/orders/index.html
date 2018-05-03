@@ -1,0 +1,126 @@
+{extend name="base/layouts" /}
+
+{block name="content"}
+<div class="">
+    <div class="layui-row  layui-col-space10" style="margin:0 10px;">
+        {include file="base/page-btns" /}
+        <div class="layui-col-xs12">
+            <table id="list"  lay-filter="list"></table>
+        </div>
+    </div>
+</div>
+{include file="base/page-actions" /}
+
+{/block}
+{block name="js"}
+<script type="text/html" id="icon">
+    {{#  if(d.icon == ''){ }}
+    {{#  } else { }}
+    <i class="iconfont {{d.icon}}"></i>
+    {{#  } }}
+</script>
+<script type="text/html" id="name">
+    {{d.pre}}{{d.name}}
+</script>
+<script type="text/html" id="type">
+    {{#  if(d.type === 0){ }}
+    导航(模块)
+    {{#  } else if(d.type === 1) { }}
+    子导航(页面)
+    {{#  } else if(d.type === 2) { }}
+    按钮
+    {{#  } else if(d.type === 3) { }}
+    操作
+    {{#  } }}
+</script>
+<script type="text/html" id="show">
+    {{#  if(d.show === 1){ }}
+    显示
+    {{#  } else { }}
+    隐藏
+    {{#  } }}
+</script>
+<script type="text/html" id="auth">
+    {{#  if(d.auth === 1){ }}
+    公开访问
+    {{#  } else { }}
+    依赖权限
+    {{#  } }}
+</script>
+<script>
+    layui.use(['form', 'element','layedit', 'jquery','table'], function() {
+        var $ = layui.jquery
+                ,table = layui.table;
+        var data = {$list|raw};
+        table.render({
+            elem: '#list'
+            ,id:'url'
+            ,data: data
+            ,height: 'full'
+            ,limit: 30000
+            ,cols: [[
+                {field: 'id', title: 'ID', align:'center',width: 80}
+                ,{field: 'name', title: '名称',align:'left', width: 300, templet: '#name'}
+                ,{field: 'url', title: '路径（模块名/方法名）',align:'left', width: 180}
+                ,{field: 'type', title: '类型',align:'center', width: 120, templet: '#type'}
+                ,{field: 'show', title: '是否显示',align:'center', width: 100, templet: '#show'}
+                ,{field: 'auth', title: '权限依赖',align:'center', width: 100, templet: '#auth'}
+                ,{field: 'sort', title: '序号',align:'center', width: 80}
+                ,{field: 'icon', title: '图标',align:'center', width: 80, templet: '#icon'}
+                ,{field:'actions',title: '操作',toolbar: '#tool',align:'left',width:360}
+            ]]
+            ,skin: 'row' //表格风格
+            ,even: true
+            ,  done: function(res, curr, count){
+                var data = res.data;
+                for(var i=0;i<data.length;i++)
+                {
+                    var type = data[i]['type'];
+                    var row = $(".layui-table:eq(1) tbody tr:eq("+i+")");
+                    if(type === 0){
+                        $(row).find('[lay-event="addAct"]').remove();
+                        $(row).find('[lay-event="addBtn"]').remove();
+                    }else if(type === 1){
+                        $(row).find('[lay-event="addNav"]').remove();
+                    }else{
+                        $(row).find('[lay-event="addAct"]').remove();
+                        $(row).find('[lay-event="addBtn"]').remove();
+                        $(row).find('[lay-event="addNav"]').remove();
+                    }
+                }
+            }
+        });
+
+        table.on('tool(list)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if(layEvent === 'delete'){ //删除
+                layer.confirm('真的删除【'+ data.name +'】么', function(index){
+                    $.post("{:url('node/delete')}?id="+data.id,function(res){
+                        var data = JSON.parse(res);
+                        if(data.code == true){
+                            obj.del();
+                        }
+                        layer.msg(data.info);
+                    })
+                });
+            }
+            else if(layEvent === 'edit'){ //编辑
+                location.href = "{:url('node/edit')}?id="+data.id;
+            }
+            else if(layEvent === 'addNav'){
+                location.href = "{:url('node/addNav')}?id="+data.id+"&type=addNav";
+            }
+            else if(layEvent === 'addBtn'){
+                location.href = "{:url('node/addBtn')}?id="+data.id+"&type=addBtn";
+            }
+            else if(layEvent === 'addAct'){
+                location.href = "{:url('node/addAct')}?id="+data.id+"&type=addAct";
+            }
+        });
+
+    })
+</script>
+{/block}

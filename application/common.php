@@ -80,7 +80,7 @@ function query_user(string $field, $uid = 0){
  * @return false|string
  * @author szh
  */
-function friendlyDate($sTime,$type = 'vague') {
+function friendly_date($sTime,$type = 'vague') {
     if (!$sTime)
         return '未定义';
     //sTime=源时间，cTime=当前时间，dTime=时间差
@@ -155,4 +155,33 @@ function node_deep_sort($array, $child = '', $key = 'sort'){
             $array[$key][$child] = node_deep_sort($value[$child], $child, $key);
     }
     return $array;
+}
+
+/**
+ * 通过md5，检测文件是否存在
+ * @param $md5
+ * @return bool
+ * @author szh
+ */
+function get_file_by_md5($md5){
+    $file = model('core/picture')->getFileByMd5($md5);
+    if(empty($file))
+        return false;
+    return $file;
+}
+
+/**
+ * 通过图片id，获取图片地址
+ * @param $id
+ * @return bool
+ * @author szh
+ */
+function file_path_by_id($id){
+    $file = model('core/picture')->getFileById($id);
+    if(empty($file))
+        return false;
+    if($file['path'])
+        return $file['path'];
+    else
+        return $file['url'];
 }
