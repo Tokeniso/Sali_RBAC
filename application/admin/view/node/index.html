@@ -148,15 +148,19 @@
         form.on('select(topNode)', function (data){
             $.post("{:url('node/index')}", {id:data.value}, function(res){
                 var data = JSON.parse(res);
+                var box = $('[data-role="sonNode"]');
+                box.empty();
                 if(data.code){
-                    var box = $('[data-role="sonNode"]');
                     var len = data.data.length;
+                    box.append('<option value="0">— 选择子菜单</option>')
                     console.log(data.data);
                     for( var i = 0; i < len; i++){
                         box.append('<option value="'+data.data[i].id+'">　|—'+data.data[i].name+'</option>')
                     }
-                    form.render('select', 'sonNode');
+                }else{
+                    box.append('<option value="0">— 没有子菜单了</option>')
                 }
+                form.render('select', 'sonNode');
             });
         });
     })
