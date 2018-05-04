@@ -17,7 +17,7 @@ class Base extends Controller
         //TODO 安装检测
         $lockFile = './install.lock';
         if (!file_exists($lockFile)) {
-            file_put_contents($lockFile, date('Y-m-d H-i-s'));
+            //$this->redirect(url('install/install/index'));
         }
 
     }

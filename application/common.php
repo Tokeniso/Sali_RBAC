@@ -50,6 +50,27 @@ function text($text)
 }
 
 /**
+ * 转译html文本
+ * @param $text
+ * @return string
+ * @author szh
+ */
+function html($text)
+{
+    if (is_array($text)) {
+        array_map('html', $text);
+    } else {
+        //插入换行
+        $text = nl2br($text);
+        //转译字符
+        $text = htmlentities($text);
+        //去除收尾默认字符集
+        $text = trim($text);
+    }
+    return $text;
+}
+
+/**
  * 获取用户的基本信息
  * @param $field
  * @param int $uid
