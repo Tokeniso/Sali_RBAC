@@ -199,10 +199,13 @@ function file_path_by_id($id)
  * @param string|array $to 接收人
  * @param string $subject 邮件标题
  * @param string $content 邮件内容(html模板渲染后的内容)
- * @return string|true
+ * @return string|true true表示发送成功|string发送失败是的错误信息
  */
-function send_email($to, $subject = '', $content = '')
+function send_email($to, $subject = '这份邮件没有内容', $content = '空')
 {
+    if (empty($to))
+        return '为传入接收人邮箱';
+
     require_once '../vendor/phpmailer/phpmailer/src/Exception.php';
     require_once '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
     require_once '../vendor/phpmailer/phpmailer/src/SMTP.php';
@@ -214,18 +217,25 @@ function send_email($to, $subject = '', $content = '')
             $mail->CharSet = 'UTF-8'; //设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
             $mail->setLanguage('zh_cn');
             //Server settings
-            $mail->SMTPDebug = 0;                                 // Enable verbose debug output
-            $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = $config['smtp_server'];  // Specify main and backup SMTP servers
-            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = $config['smtp_user'];                 // SMTP username
-            $mail->Password = $config['smtp_pwd'];                           // SMTP password
-            $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
-            $mail->Port = $config['smtp_port'];                                    // TCP port to connect to
+            $mail->SMTPDebug = 0;                        // Enable verbose debug output
+            $mail->isSMTP();                             // Set mailer to use SMTP
+            $mail->Host = $config['smtp_server'];        // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                      // Enable SMTP authentication
+            $mail->Username = $config['smtp_user'];      // SMTP username
+            $mail->Password = $config['smtp_pwd'];       // SMTP password
+            $mail->SMTPSecure = 'ssl';                   // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = $config['smtp_port'];          // TCP port to connect to
 
             //Recipients
             $mail->setFrom($config['smtp_user'], $config['email_id']);
-            $mail->addAddress($to);     // Add a recipient
+            // Add recipient
+            if (is_array($to)) {
+                foreach ($to as $value) {
+                    $mail->addAddress($value);
+                }
+            } else {
+                $mail->addAddress($to);
+            }
 
             //Content
             $mail->Subject = $subject;
@@ -238,5 +248,44 @@ function send_email($to, $subject = '', $content = '')
         } catch (Exception $e) {
             return $mail->ErrorInfo;
         }
+    }
+    return '没有检测到PHPMailer库文件';
+}
+
+/**
+ * 投递异步任务
+ * @param array $data 投递的数据
+ * @return string|true
+ * @author szh
+ */
+function tasks_push($data){
+    if( empty($data) )
+        return "Empty Data";
+    $client = new \swoole_client(SWOOLE_SOCK_TCP);
+    if( !$client->connect("127.0.0.1", 9502 , 1) )
+        return "Connect Error";
+
+    $json_data = json_encode($data);
+    $client->send( $json_data );
+    $client->close();
+    return true;
+}
+
+/**
+ * 记录相关日志
+ * @param string $message
+ * @param int $type
+ * @author szh
+ */
+function _log($message, $type = 0){
+    $msg = [
+        'info',//记录信息
+        'error',//异常记录
+        'waring',//错误信息
+    ];
+    $head = $msg[$type] ?? 'info' ;
+    if(!empty($message)){
+        $message = "[ $head ] [ " . request()->ip() . " ] [ " . date('Y-m-d H-i-s') . " ]" . $message . PHP_EOL;
+        error_log($message, 3, '../running.log');
     }
 }

@@ -12,7 +12,10 @@ class Orders extends Admin
 
     public function index()
     {
-
+        tasks_push([
+            'type' => 'email',
+            'data' => '946206343@qq.com'
+        ]);
         $this->assign('list', "{}");
         return $this->fetch();
     }
