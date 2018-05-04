@@ -9,7 +9,8 @@ namespace app\core\model;
 
 use think\Model;
 
-class Picture extends Model {
+class Picture extends Model
+{
 
     /**
      * 通过md5，查找文件
@@ -17,10 +18,11 @@ class Picture extends Model {
      * @return array|mixed|null|\PDOStatement|string|Model
      * @author szh
      */
-    public function getFileByMd5($md5){
+    public function getFileByMd5($md5)
+    {
         $tag = 'file_md5_' . $md5;
         $file = cache($tag);
-        if($file === false){
+        if ($file === false) {
             $file = $this->where('md5', $md5)->field(true)->find();
             cache($tag, $file);
         }
@@ -33,10 +35,11 @@ class Picture extends Model {
      * @return array|mixed|null|\PDOStatement|string|Model
      * @author szh
      */
-    public function getFileById($id){
+    public function getFileById($id)
+    {
         $tag = 'file_id_' . $id;
         $file = cache($tag);
-        if($file === false){
+        if ($file === false) {
             $file = $this->where('id', $id)->field(true)->find();
             cache($tag, $file);
         }

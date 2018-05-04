@@ -9,7 +9,8 @@ namespace app\admin\model;
 
 use think\Model;
 
-class Role extends Model {
+class Role extends Model
+{
 
     protected $name = 'admin_role';
 
@@ -18,7 +19,8 @@ class Role extends Model {
      * @return array|\PDOStatement|string|\think\Collection
      * @author szh
      */
-    public static function listRole(){
+    public static function listRole()
+    {
         $list = self::field(true)->select();
         return $list;
     }
@@ -30,7 +32,8 @@ class Role extends Model {
      * @return array|null|\PDOStatement|string|Model
      * @author szh
      */
-    public static function getRoleById($id){
+    public static function getRoleById($id)
+    {
         $role = self::field(true)->find($id);
         return $role;
     }

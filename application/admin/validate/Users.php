@@ -9,7 +9,8 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class Users extends Validate {
+class Users extends Validate
+{
 
     /**
      * 验证规则
@@ -37,8 +38,9 @@ class Users extends Validate {
      * @return string
      * @author szh
      */
-    protected function phone($value){
-        if(empty(is_phone($value))){
+    protected function phone($value)
+    {
+        if (empty(is_phone($value))) {
             return '手机号码格式错误';
         }
         return true;
@@ -50,9 +52,9 @@ class Users extends Validate {
      */
     protected $scene = [
         //更新
-        'update'  =>  ['phone', 'pass'],
+        'update' => ['phone', 'pass'],
         //登录
-        'login'  =>  ['verify', 'phone', 'pass'],
+        'login' => ['verify', 'phone', 'pass'],
     ];
 
 }

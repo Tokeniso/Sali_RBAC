@@ -9,7 +9,8 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class Node extends Validate {
+class Node extends Validate
+{
 
     protected $rule = [
         'name' => 'require|max:20',

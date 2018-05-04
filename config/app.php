@@ -135,4 +135,17 @@ return [
     // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
 
+    //邮箱配置
+    'email_config' => [
+        //smtp服务器
+        'smtp_server' => 'smtp.163.com',
+        //服务器端口
+        'smtp_port' => '465',
+        //服务器用户名
+        'smtp_user' => 'szh199307@163.com',
+        //服务器授权密码
+        'smtp_pwd' => 'secret',
+        //用户昵称
+        'email_id' => 'Sali\'s Server',
+    ],
 ];

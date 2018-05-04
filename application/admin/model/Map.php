@@ -9,7 +9,8 @@ namespace app\admin\model;
 
 use think\Model;
 
-class Map extends Model {
+class Map extends Model
+{
 
     protected $name = 'admin_map';
 
@@ -21,8 +22,9 @@ class Map extends Model {
      * @return array
      * @author szh
      */
-    public static function getAllowNode($role_id, $uid) : array {
-        if($role_id === 1)
+    public static function getAllowNode($role_id, $uid) : array
+    {
+        if ($role_id === 1)
             return Node::getChildList();
 
         //权限组节点
@@ -41,10 +43,11 @@ class Map extends Model {
      * @return array
      * @author szh
      */
-    public static function getRoleNode($role_id) : array {
+    public static function getRoleNode($role_id) : array
+    {
         $tag = 'allow_node_by_role_id_' . $role_id;
         $node = cache($tag);
-        if($node === false){
+        if ($node === false) {
             $node = self::where('role_id', $role_id)->where('type', 'role')->column('node_id');
             cache($tag, $node);
         }
@@ -57,10 +60,11 @@ class Map extends Model {
      * @return array
      * @author szh
      */
-    public static function getUserNode($uid) : array {
+    public static function getUserNode($uid) : array
+    {
         $tag = 'user_node_by_user_id_' . $uid;
         $node = cache($tag);
-        if($node === false){
+        if ($node === false) {
             $node = self::where('role_id', $uid)->where('type', 'user')->column('node_id');
             cache($tag, $node);
         }

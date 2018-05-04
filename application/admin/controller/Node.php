@@ -9,11 +9,13 @@ namespace app\admin\controller;
 
 use app\admin\model\Node as NodeModel;
 
-class Node extends Admin {
+class Node extends Admin
+{
 
     protected $nodeDb;
 
-    public function initialize(){
+    public function initialize()
+    {
 
         $this->nodeDb = db('admin_node');
     }
@@ -24,12 +26,13 @@ class Node extends Admin {
      * @return mixed
      * @author szh
      */
-    public function index(){
-        if(request()->isAjax()){
+    public function index()
+    {
+        if (request()->isAjax()) {
             $id = input('id/d', 0);
-            if(!empty($id)){
+            if (!empty($id)) {
                 $sonNodes = NodeModel::getChildList([$id, false], null, true);
-                if(!empty($sonNodes)){
+                if (!empty($sonNodes)) {
                     $sonNodes = array_merge($sonNodes);
                     $this->ajaxSuccess($sonNodes);
                 }
@@ -41,7 +44,7 @@ class Node extends Admin {
 
         //获取节点
         $sonNodes = [];
-        if(!empty($sId)){
+        if (!empty($sId)) {
             //有子搜索选项
             $list = NodeModel::getChildList($sId, null, true);
         } else {
@@ -49,7 +52,7 @@ class Node extends Admin {
             $list = NodeModel::getChildList($tId, null, true);
         }
         //搜索顶级节点，展示搜索的子节点
-        if(!empty($tId))
+        if (!empty($tId))
             $sonNodes = NodeModel::getChildList([$tId, false], null, true);
 
         $list = array_merge($list);
@@ -70,7 +73,8 @@ class Node extends Admin {
      * @return mixed
      * @author szh
      */
-    public function add(){
+    public function add()
+    {
 
         $this->editAssign('edit');
 
@@ -82,14 +86,15 @@ class Node extends Admin {
      * @return mixed
      * @author szh
      */
-    public function edit(){
+    public function edit()
+    {
 
         $this->editAssign('edit');
 
         $id = input('get.id/d', 0);
         $node = NodeModel::getNodeById($id);
 
-        if(empty($node))
+        if (empty($node))
             $this->error('错误的id', url('node/index'));
         $this->assign('node', $node);//编辑节点
         return $this->fetch('node/add');
@@ -101,9 +106,10 @@ class Node extends Admin {
      * @return mixed
      * @author szh
      */
-    public function addNav(){
+    public function addNav()
+    {
         $node = $this->editAssign('addNav');
-        if($node['type'] !== 0)
+        if ($node['type'] !== 0)
             $this->error('父级不是导航', url('node/index'));
         $this->assign('node', [
             'pid' => $node['id'],
@@ -117,9 +123,10 @@ class Node extends Admin {
      * @return mixed
      * @author szh
      */
-    public function addBtn(){
+    public function addBtn()
+    {
         $node = $this->editAssign('addBtn');
-        if($node['type'] !== 1)
+        if ($node['type'] !== 1)
             $this->error('父级不是子导航', url('node/index'));
         $this->assign('node', [
             'pid' => $node['id'],
@@ -133,9 +140,10 @@ class Node extends Admin {
      * @return mixed
      * @author szh
      */
-    public function addAct(){
+    public function addAct()
+    {
         $node = $this->editAssign('addAct');
-        if($node['type'] !== 1)
+        if ($node['type'] !== 1)
             $this->error('父级不是子导航', url('node/index'));
         $this->assign('node', [
             'pid' => $node['id'],
@@ -150,13 +158,14 @@ class Node extends Admin {
      * @return array|mixed|null|\PDOStatement|string|\think\Model
      * @author szh
      */
-    private function editAssign($type){
+    private function editAssign($type)
+    {
         $this->nodeAjax($type);
-        if(in_array($type, ['addNav', 'addBtn', 'addAct'])){
+        if (in_array($type, ['addNav', 'addBtn', 'addAct'])) {
             $id = input('get.id/d', 0);
             $node = NodeModel::getNodeById($id);
 
-            if(empty($node))
+            if (empty($node))
                 $this->error('错误的id', url('node/index'));
             return $node;//新增节点，返回父级
         }
@@ -167,14 +176,15 @@ class Node extends Admin {
      * @param string $type 访问的节点的方法名
      * @author szh
      */
-    private function nodeAjax($type){
-        if(request()->isAjax()){
+    private function nodeAjax($type)
+    {
+        if (request()->isAjax()) {
             $nodeModel = new NodeModel();
 
             $data = input('form/a', []);
             $validate = validate('admin/node');
 
-            if(!$validate->check($data))
+            if (!$validate->check($data))
                 $this->ajaxError($validate->getError());
 
             $pid = $data['pid'] ?? 0;
@@ -183,29 +193,29 @@ class Node extends Admin {
             $this->checkRightNode($type, $data, $father);
 
             $name = '新增';
-            if($data['id']){
+            if ($data['id']) {
                 $node = $nodeModel::getNodeById($data['id']);
-                if(empty($node))
+                if (empty($node))
                     $this->ajaxError('错误的id');
                 $name = '编辑';
                 $res = $nodeModel->where('id', $data['id'])->update($data);
             } else {
                 $res = $nodeModel->insertGetId($data);
             }
-            if(!$res)
+            if (!$res)
                 $this->ajaxError($nodeModel->getError() ?? $name . '失败');
             $pid = isset($data['pid']) && is_numeric($data['pid']) ? $data['pid'] : 0;
             $data['auth'] = $data['auth'] ?? 0;
-            if($data['id']){
-                if($data['auth'] != $node['auth']){
-                    cache('node_pid_'.$pid.'_auth_' . $data['auth'], null);
-                    cache('node_pid_'.$pid.'_auth_' . $node['auth'], null);
+            if ($data['id']) {
+                if ($data['auth'] != $node['auth']) {
+                    cache('node_pid_' . $pid . '_auth_' . $data['auth'], null);
+                    cache('node_pid_' . $pid . '_auth_' . $node['auth'], null);
                 }
                 cache('node_url_' . $node['url'], null);
                 cache('node_id_' . $data['id'], null);
             } else {
-                cache('node_pid_'.$pid.'_auth_', null);
-                cache('node_pid_'.$pid.'_auth_' . $data['auth'], null);
+                cache('node_pid_' . $pid . '_auth_', null);
+                cache('node_pid_' . $pid . '_auth_' . $data['auth'], null);
             }
             $this->ajaxSuccess($name . '成功', url('node/index'));
         }
@@ -219,26 +229,27 @@ class Node extends Admin {
      * @param $father
      * @author szh
      */
-    private function checkRightNode($type, $data, $father = []){
-        switch ($type){
+    private function checkRightNode($type, $data, $father = [])
+    {
+        switch ($type) {
             case 'addAct':
-                if($data['type'] != 3 || !isset($father['type']) || $father['type'] !== 1)
+                if ($data['type'] != 3 || !isset($father['type']) || $father['type'] !== 1)
                     $this->ajaxSuccess('越权操作');
                 break;
             case 'addBtn':
-                if($data['type'] != 2 || !isset($father['type']) || $father['type'] !== 1)
+                if ($data['type'] != 2 || !isset($father['type']) || $father['type'] !== 1)
                     $this->ajaxSuccess('越权操作');
                 break;
             case 'addNav':
-                if($data['type'] != 1 || !isset($father['type']) || $father['type'] !== 0)
+                if ($data['type'] != 1 || !isset($father['type']) || $father['type'] !== 0)
                     $this->ajaxSuccess('越权操作');
                 break;
             case 'add':
-                if($data['type'] != 0)
+                if ($data['type'] != 0)
                     $this->ajaxSuccess('越权操作');
                 break;
             default:
-                if($type !== 'edit')
+                if ($type !== 'edit')
                     $this->ajaxSuccess('越权操作');
                 break;
         }
@@ -248,17 +259,18 @@ class Node extends Admin {
      * 删除节点
      * @author szh
      */
-    public function delete(){
+    public function delete()
+    {
         $id = input('get.id/d', 0);
         $node = NodeModel::getNodeById($id);
-        if(empty($node))
+        if (empty($node))
             $this->ajaxError('错误的id');
 
         $res = NodeModel::where('id', $id)->delete();
-        if(!$res)
+        if (!$res)
             $this->ajaxError('删除失败');
-        cache('node_pid_'.$node['pid'].'_auth_', null);
-        cache('node_pid_'.$node['pid'].'_auth_' . $node['auth'], null);
+        cache('node_pid_' . $node['pid'] . '_auth_', null);
+        cache('node_pid_' . $node['pid'] . '_auth_' . $node['auth'], null);
         cache('node_url_' . $node['url'], null);
         cache('node_id_' . $id, null);
         $this->ajaxSuccess('删除成功');

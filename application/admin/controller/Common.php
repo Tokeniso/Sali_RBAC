@@ -12,9 +12,11 @@ use think\facade\Cache;
 use think\facade\Session;
 use app\admin\model\Users;
 
-class Common extends Base{
+class Common extends Base
+{
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -22,7 +24,8 @@ class Common extends Base{
      * 清空数据缓存
      * @author szh
      */
-    public function clearCache(){
+    public function clearCache()
+    {
         Cache::clear();
     }
 
@@ -30,7 +33,8 @@ class Common extends Base{
      * 清空session
      * @author szh
      */
-    public function logout(){
+    public function logout()
+    {
         Session::clear();
     }
 
@@ -40,25 +44,26 @@ class Common extends Base{
      * @return mixed
      * @author szh
      */
-    public function login(){
-        if(request()->isAjax()){
-            if(session('admin_user'))
+    public function login()
+    {
+        if (request()->isAjax()) {
+            if (session('admin_user'))
                 $this->ajaxSuccess('登录成功', url('admin/index'));
             //验证数据
             $data = input('', [], 'text');
             $validate = validate('admin/users');
 
-            if(!$validate->scene('login')->check($data))
+            if (!$validate->scene('login')->check($data))
                 $this->ajaxError($validate->getError());
 
             //登录
             $userModel = new Users();
-            if(!$userModel->login($data['phone'], $data['pass']))
+            if (!$userModel->login($data['phone'], $data['pass']))
                 $this->ajaxError($userModel->getError());
 
             $this->ajaxSuccess('登录成功', url('admin/index'));
         }
-        if(session('admin_user'))
+        if (session('admin_user'))
             $this->redirect(url('admin/index'));
         return $this->fetch();
     }
@@ -68,10 +73,11 @@ class Common extends Base{
      * @return \think\response\Json
      * @author szh
      */
-    public function verify(){
-        if(request()->isAjax()){
+    public function verify()
+    {
+        if (request()->isAjax()) {
             $url = captcha_src();
-            $this->ajaxSuccess('获取成功',$url);
+            $this->ajaxSuccess('获取成功', $url);
         }
         $this->ajaxError('获取失败');
     }

@@ -10,15 +10,17 @@ namespace app\admin\controller;
 use app\admin\model\Map;
 use app\admin\model\Node;
 
-class Admin extends Common {
+class Admin extends Common
+{
 
     protected $user;
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
 
         $this->user = session('glasses_user');
-        if(empty($this->user))
+        if (empty($this->user))
             $this->redirect(url('common/login'));
 
         //当前用户权限组
@@ -27,7 +29,7 @@ class Admin extends Common {
         $url = strtolower(request()->controller() . '/' . request()->action());
         $node = Node::getNodeByUrl($url);
         //没有节点
-        if(empty($node))
+        if (empty($node))
             $this->error('没有权限');
 
         //获取节点路径
@@ -38,7 +40,7 @@ class Admin extends Common {
         $allowAccess = Map::getAllowNode($role_id, $this->user['id']);
 
         //没有权限，跳转至无权限
-        if(empty($allowAccess) || !in_array($node['id'], $allowAccess))
+        if (empty($allowAccess) || !in_array($node['id'], $allowAccess))
             $this->error('没有权限');
         //当前顶级节点id
         $fId = Node::topNodeId($node['id']);
@@ -59,21 +61,22 @@ class Admin extends Common {
      * @return mixed
      * @author szh
      */
-    public function index(){
+    public function index()
+    {
         $info = array(
             '操作系统' => PHP_OS,
             '运行环境' => $_SERVER["SERVER_SOFTWARE"],
             'PHP运行方式' => php_sapi_name(),
             '上传附件限制' => ini_get('upload_max_filesize'),
-            '执行时间限制' => ini_get('max_execution_time').'秒',
+            '执行时间限制' => ini_get('max_execution_time') . '秒',
             '服务器时间' => date("Y年n月j日 H:i:s"),
-            '北京时间' => gmdate("Y年n月j日 H:i:s",time()+8*3600),
+            '北京时间' => gmdate("Y年n月j日 H:i:s", time() + 8 * 3600),
             'ThinkPHP版本' => app()->version(),
         );
 
         $system = config('system');
-        $this->assign('system',$system);
-        $this->assign('info',$info);
+        $this->assign('system', $system);
+        $this->assign('info', $info);
         return $this->fetch();
     }
 }

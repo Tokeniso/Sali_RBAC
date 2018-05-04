@@ -9,7 +9,7 @@
                 <label class="layui-form-label">筛选：</label>
                 <div class="layui-input-inline" style="width:200px;">
                     <select lay-filter="topNode" name="tId" class="layui-select">
-                        <option value="0">— 选择菜单</option>
+                        <option value="0">— 全部菜单</option>
                         {volist name="topNodes" id="vo"}
                             <option value="{$vo.id}" {if condition="$vo.id eq $tId"}selected{/if}>　|— {$vo.name}</option>
                         {/volist}
@@ -146,19 +146,20 @@
          * 选取顶级节点，获取节点下的子节点
          */
         form.on('select(topNode)', function (data){
-            $.post("{:url('node/index')}", {id:data.value}, function(res){
+            var id = data.value;
+            $.post("{:url('node/index')}", {id:id}, function(res){
                 var data = JSON.parse(res);
                 var box = $('[data-role="sonNode"]');
                 box.empty();
                 if(data.code){
                     var len = data.data.length;
-                    box.append('<option value="0">— 选择子菜单</option>')
+                    box.append('<option value="0">— 选择子菜单</option>');
                     console.log(data.data);
                     for( var i = 0; i < len; i++){
                         box.append('<option value="'+data.data[i].id+'">　|—'+data.data[i].name+'</option>')
                     }
                 }else{
-                    box.append('<option value="0">— 没有子菜单了</option>')
+                    box.append('<option value="0">— 没有子菜单了</option>');
                 }
                 form.render('select', 'sonNode');
             });

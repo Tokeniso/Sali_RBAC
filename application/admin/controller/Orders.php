@@ -7,15 +7,18 @@
  */
 namespace app\admin\controller;
 
-class Orders extends Admin {
+class Orders extends Admin
+{
 
-    public function index(){
+    public function index()
+    {
 
         $this->assign('list', "{}");
         return $this->fetch();
     }
 
-    public function add(){
+    public function add()
+    {
 
         return $this->fetch();
     }
