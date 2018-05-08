@@ -279,17 +279,21 @@ function send_email($to, $subject = '这份邮件没有内容', $content = '空'
  * @return string|true
  * @author szh
  */
-function tasks_push($data){
-    if( empty($data) )
-        return "Empty Data";
-    $client = new \swoole_client(SWOOLE_SOCK_TCP);
-    if( !$client->connect("127.0.0.1", 9502 , 1) )
-        return "Connect Error";
+function tasks_push($data)
+{
+    //加载swoole客户端
+    require_once '../extend/tool/swooleClient.php';
+    try {
+        $swoole = new tool\swooleclient\swooleClient();
 
-    $json_data = json_encode($data);
-    $client->send( $json_data );
-    $client->close();
-    return true;
+        $json_data = json_encode($data);
+        $swoole::$instance->send($json_data);
+        $swoole::$instance->close();
+
+        return true;
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
 }
 
 /**
@@ -298,15 +302,13 @@ function tasks_push($data){
  * @param int $type
  * @author szh
  */
-function _log($message, $type = 0){
-    $msg = [
-        'info',//记录信息
-        'error',//异常记录
-        'waring',//错误信息
-    ];
-    $head = $msg[$type] ?? 'info' ;
-    if(!empty($message)){
-        $message = "[ $head ] [ " . request()->ip() . " ] [ " . date('Y-m-d H-i-s') . " ]" . $message . PHP_EOL;
-        error_log($message, 3, '../running.log');
-    }
+function _log($message, $type = 0)
+{
+    tasks_push([
+        'type' => 'log',
+        'data' => [
+            'message' => $message,
+            'type' => $type,
+        ]
+    ]);
 }

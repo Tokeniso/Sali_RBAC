@@ -32,9 +32,9 @@ class Server extends Base {
         $server->set(array('task_worker_num' => 4));
 
         //接受异步任务
-        $server->on('receive', function($server, $fd, $reactor_id, $data) {
+        $server->on('receive', function($server, $fd, $reactor_id, $data) use ($_this) {
             $task_id = $server->task($data);
-            _log("Dispath AsyncTask: [id=$task_id] - {$data}");
+            $_this->log("Dispath AsyncTask: [id=$task_id] - {$data}");
             echo "Dispath AsyncTask: [id=$task_id]" . PHP_EOL;
         });
 
@@ -42,7 +42,9 @@ class Server extends Base {
         $server->on('task', function ($server, $task_id, $reactor_id, $string) use ($_this) {
             $data = json_decode($string, true);
             if (!isset($data['type']) || empty($data['type'])){
-                _log("无效的任务 - {$string}", 1);
+                $_this->log([
+                    'message' => "无效的任务 - {$string}",
+                    'type' => 1]);
                 die("无效的任务 - {$string}" . PHP_EOL);
             }
             //匹配任务
@@ -51,13 +53,16 @@ class Server extends Base {
                     $email = $data['data'] ?? '';
                     $_this->sendEmail($email);
                     break;
+                case 'log':
+                    $this->log($data['data']);
+                    break;
             }
             $server->finish("$string -> OK");
         });
 
         //异步任务结果处理
-        $server->on('finish', function ($server, $task_id, $data) {
-            _log("AsyncTask[$task_id] finished: {$data}");
+        $server->on('finish', function ($server, $task_id, $data) use ($_this) {
+            $_this->log("AsyncTask[$task_id] finished: {$data}");
             echo "AsyncTask[$task_id] finished: {$data} " . PHP_EOL;
         });
 
@@ -73,5 +78,31 @@ class Server extends Base {
         swoole_timer_after(10000, function () use ($email) {
             //send_email($email);
         });
+    }
+
+    /**
+     * 异步记录日志
+     * @param $data
+     * @author szh
+     */
+    private function log($data){
+        if(is_array($data)){
+            $type = $data['type'] ?? 0;
+            $message = $data['message'] ?? '';
+        }else{
+            $type = 0;
+            $message = $data;
+        }
+
+        $msg = [
+            'info',//记录信息
+            'error',//异常记录
+            'waring',//错误信息
+        ];
+        $head = $msg[$type] ?? 'info';
+        if (!empty($message)) {
+            $message = "[ $head ] [ " . date('Y-m-d H-i-s') . " ]" . $message . PHP_EOL;
+            error_log($message, 3, '../runtime/log/running.log');
+        }
     }
 }
