@@ -2,8 +2,6 @@
 /**
  * Created by PhpStorm.
  * User: szh
- * Date: 2018/5/4
- * Time: 13:59
  */
 namespace app\core\controller;
 

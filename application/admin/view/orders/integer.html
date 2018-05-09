@@ -1,0 +1,27 @@
+{extend name="base/layouts" /}
+{block name="content"}
+<div class="mainfrm">
+    <div class="layui-row  layui-col-space10" style="margin:0 10px;">
+        <div class="layui-col-xs12">
+            <div class="gl-header">积分策略</div>
+            <form class="layui-form layui-form-pane" lay-filter="form" action="">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">积分百分比</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <input type="number" name="integer" value="{$integer ?? ''}" autocomplete="off" placeholder="请输入积分百分比" lay-verify="required|number" class="layui-input">
+                        * 最多小数点后取两位小数。<br/>
+                        * 公式：介绍人获取积分 = 订单价格 * ( 积分百分比 / 100 )
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-top: 80px;">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}

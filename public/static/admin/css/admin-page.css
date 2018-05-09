@@ -34,22 +34,33 @@
   font-size: 16px;
   border-bottom: 1px solid #e5e5e5;
 }
-.gl-picture-upload {
-  display: none;
+.gl-picture-box {
+  display: flex;
+  flex-wrap: wrap;
+}
+.gl-picture-box .gl-picture-upload {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
   position: relative;
+  z-index: 1024;
   align-items: flex-end;
   width: 100px;
+  background-color: #e5e5e5;
 }
-.gl-picture-upload .gl-picture-remove {
+.gl-picture-box .gl-picture-upload .gl-picture-remove {
   margin: 3px;
   position: absolute;
+  z-index: 1025;
   top: 0;
   right: 0;
   color: #fff;
   border-radius: 50%;
   background-color: #999999;
   opacity: .5;
+  cursor: pointer;
 }
-.gl-picture-upload .gl-picture-remove:hover {
+.gl-picture-box .gl-picture-upload .gl-picture-remove:hover {
   opacity: 1;
 }

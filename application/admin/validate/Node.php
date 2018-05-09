@@ -2,8 +2,6 @@
 /**
  * Created by PhpStorm.
  * User: szh
- * Date: 2018/4/20
- * Time: 11:11
  */
 namespace app\admin\validate;
 
