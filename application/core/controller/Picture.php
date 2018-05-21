@@ -12,7 +12,7 @@ class Picture extends Base
 
     /**
      * 单图片上传
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function uploadPicture()
     {
@@ -61,7 +61,7 @@ class Picture extends Base
 
     /**
      * 多图片上传
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function uploadPictures()
     {
@@ -126,7 +126,7 @@ class Picture extends Base
      * 处理图片原始名称
      * @param $name
      * @return string
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function fileName($name)
     {
@@ -141,7 +141,7 @@ class Picture extends Base
      * 本地上传图片文件
      * @param $file
      * @return array|string
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function localUpload($file)
     {

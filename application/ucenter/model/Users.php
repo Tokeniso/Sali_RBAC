@@ -14,7 +14,7 @@ class Users extends Model
      * 通过id查找用户
      * @param int $id
      * @return array|bool|mixed|null|\PDOStatement|string|Model
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function getUserById(int $id)
     {
@@ -36,7 +36,7 @@ class Users extends Model
      * 通过手机号码获取用户id
      * @param $phone
      * @return array|bool
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getUserByPhone($phone)
     {
@@ -54,7 +54,7 @@ class Users extends Model
      * @param $data
      * @param $uid
      * @return bool|static
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function updateUser($data, $uid)
     {

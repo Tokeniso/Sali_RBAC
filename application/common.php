@@ -15,7 +15,7 @@
  * 检测手机号码
  * @param $phone
  * @return string
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function is_phone($phone)
 {
@@ -32,7 +32,7 @@ function is_phone($phone)
  * 输出纯文本
  * @param $text
  * @return string
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function text($text)
 {
@@ -53,7 +53,7 @@ function text($text)
  * 转译html文本
  * @param $text
  * @return string
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function html($text)
 {
@@ -75,7 +75,7 @@ function html($text)
  * @param $field
  * @param int $uid
  * @return array|bool
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function query_user(string $field, $uid = 0)
 {
@@ -102,7 +102,7 @@ function query_user(string $field, $uid = 0)
  *                           full  完整的时间
  *                           ymd   输出‘.’间隔的 Y.m.d
  * @return false|string
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function friendly_date($sTime, $type = 'vague')
 {
@@ -143,7 +143,7 @@ function friendly_date($sTime, $type = 'vague')
  * 通过图片id查找oss url
  * @param $id
  * @return mixed|string
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function get_pic_url($id)
 {
@@ -168,7 +168,7 @@ function get_pic_url($id)
  * @param string $child
  * @param string $key
  * @return mixed
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function node_deep_sort($array, $child = '', $key = 'sort')
 {
@@ -188,7 +188,7 @@ function node_deep_sort($array, $child = '', $key = 'sort')
  * 通过md5，检测文件是否存在
  * @param $md5
  * @return bool
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function get_file_by_md5($md5)
 {
@@ -202,7 +202,7 @@ function get_file_by_md5($md5)
  * 通过图片id，获取图片地址
  * @param $id
  * @return bool
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function file_path_by_id($id)
 {
@@ -277,7 +277,7 @@ function send_email($to, $subject = '这份邮件没有内容', $content = '空'
  * 投递异步任务
  * @param array $data 投递的数据
  * @return string|true
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function tasks_push($data)
 {
@@ -300,7 +300,7 @@ function tasks_push($data)
  * 记录相关日志
  * @param string $message
  * @param int $type
- * @author szh
+ * @author szh <sali_hub@163.com>
  */
 function _log($message, $type = 0)
 {
@@ -311,4 +311,33 @@ function _log($message, $type = 0)
             'type' => $type,
         ]
     ]);
+}
+
+/**
+ * 当前微秒时间
+ * @return float
+ * @author szh <sali_hub@163.com>
+ */
+function micro_time_float()
+{
+    list($second, $micro) = explode(" ", microtime());
+    return ((float)$second + (float)$micro);
+}
+
+/**
+ * 随机获取汉字
+ * @param $num
+ * @return string
+ * @author szh
+ */
+function get_zh_char($num)  // $num为生成汉字的数量
+{
+    $b = '';
+    for ($i = 0; $i < $num; $i++) {
+        // 使用chr()函数拼接双字节汉字，前一个chr()为高位字节，后一个为低位字节
+        $a = chr(mt_rand(0xB0, 0xD0)) . chr(mt_rand(0xA1, 0xF0));
+        // 转码
+        $b .= iconv('GB2312', 'UTF-8', $a);
+    }
+    return $b;
 }

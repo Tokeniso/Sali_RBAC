@@ -14,7 +14,7 @@ class Picture extends Model
      * 通过md5，查找文件
      * @param $md5
      * @return array|mixed|null|\PDOStatement|string|Model
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function getFileByMd5($md5)
     {
@@ -31,7 +31,7 @@ class Picture extends Model
      * 通过md5，查找文件
      * @param $id
      * @return array|mixed|null|\PDOStatement|string|Model
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function getFileById($id)
     {

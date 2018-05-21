@@ -22,7 +22,7 @@ class Node extends Admin
     /**
      * 节点列表
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function index()
     {
@@ -69,7 +69,7 @@ class Node extends Admin
     /**
      * 新增页面节点
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function add()
     {
@@ -82,7 +82,7 @@ class Node extends Admin
     /**
      * 编辑节点
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function edit()
     {
@@ -102,7 +102,7 @@ class Node extends Admin
     /**
      * 添加子导航
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function addNav()
     {
@@ -119,7 +119,7 @@ class Node extends Admin
     /**
      * 新增按钮
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function addBtn()
     {
@@ -136,7 +136,7 @@ class Node extends Admin
     /**
      * 新增操作
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function addAct()
     {
@@ -154,7 +154,7 @@ class Node extends Admin
      * 编辑、新增节点展示数据
      * @param string $type
      * @return array|mixed|null|\PDOStatement|string|\think\Model
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function editAssign($type)
     {
@@ -172,7 +172,7 @@ class Node extends Admin
     /**
      * ajax节点操作
      * @param string $type 访问的节点的方法名
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function nodeAjax($type)
     {
@@ -225,7 +225,7 @@ class Node extends Admin
      * @param $type
      * @param $data
      * @param $father
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function checkRightNode($type, $data, $father = [])
     {
@@ -255,7 +255,7 @@ class Node extends Admin
 
     /**
      * 删除节点
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function delete()
     {

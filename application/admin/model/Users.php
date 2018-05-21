@@ -16,7 +16,7 @@ class Users extends Model
      * @param $phone
      * @param string $pass 用户密码加密方式  md5(md5(原文 . '_glasses') . '_glasses')
      * @return bool
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function login($phone, $pass)
     {
@@ -50,7 +50,7 @@ class Users extends Model
     /**
      * 获取所有管理员
      * @return array|mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getAdmins()
     {

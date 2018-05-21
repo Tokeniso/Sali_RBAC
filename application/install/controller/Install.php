@@ -11,7 +11,7 @@ class Install extends Controller {
 
     /**
      * 安装-检测扩展
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function index(){
         $this->needsExtensions();

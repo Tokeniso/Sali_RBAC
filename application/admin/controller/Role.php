@@ -16,7 +16,7 @@ class Role extends Admin
     /**
      * 权限组列表
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function index()
     {
@@ -28,7 +28,7 @@ class Role extends Admin
     /**
      * 新增权限组
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function add()
     {
@@ -39,7 +39,7 @@ class Role extends Admin
     /**
      * 编辑权限组
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function edit()
     {
@@ -57,7 +57,7 @@ class Role extends Admin
     /**
      * 用于节点控制时，区分新增、编辑功能节点权限
      * @param string $type 传入访问的节点-方法名
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function roleAjax($type = 'add')
     {
@@ -88,7 +88,7 @@ class Role extends Admin
 
     /**
      * 删除权限组
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function delete()
     {
@@ -105,7 +105,7 @@ class Role extends Admin
 
     /**
      * 设置权限组
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function setMap()
     {

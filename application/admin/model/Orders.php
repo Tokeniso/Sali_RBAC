@@ -14,7 +14,7 @@ class Orders extends Model
      * 获取介绍人积分百分比
      * @param int $id
      * @return int|mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function getInteger($id = 1)
     {
@@ -33,7 +33,7 @@ class Orders extends Model
      * 设置介绍人积分百分比
      * @param $integer
      * @return bool
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function setInteger($integer)
     {

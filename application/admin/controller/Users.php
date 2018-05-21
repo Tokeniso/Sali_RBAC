@@ -19,7 +19,7 @@ class Users extends Admin
 
     /**
      * 管理员
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function admin()
     {
@@ -39,7 +39,7 @@ class Users extends Admin
 
     /**
      * 添加管理员权限给用户
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function addAdmin()
     {
@@ -61,7 +61,7 @@ class Users extends Admin
 
     /**
      * 移除用户的管理员权限
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function removeAdmin()
     {
@@ -82,7 +82,7 @@ class Users extends Admin
 
     /**
      * 设置用户权限组
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function setRole()
     {

@@ -22,7 +22,7 @@ class Server extends Base {
 
     /**
      * 异步处理程序
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function tasksServer(){
         $_this = $this;
@@ -70,7 +70,7 @@ class Server extends Base {
     /**
      * 发送邮件
      * @param $email
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function sendEmail($email){
         swoole_timer_after(10000, function () use ($email) {
@@ -81,7 +81,7 @@ class Server extends Base {
     /**
      * 异步记录日志
      * @param $data
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     private function log($data){
         if(is_array($data)){

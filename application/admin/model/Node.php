@@ -21,7 +21,7 @@ class Node extends Model
      * @param int $deep 子类树状深度 【0】当前子类为顶级分类
      * @param string $tree 需要树状结构的数据  【$tree】父类下子类的字段名称
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getChildList($pid = 0, $auth = null, $data = false, $deep = 0, $tree = '')
     {
@@ -87,7 +87,7 @@ class Node extends Model
      * 通过url查找节点信息
      * @param $url
      * @return array|mixed|null|\PDOStatement|string|Model
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getNodeByUrl($url)
     {
@@ -104,7 +104,7 @@ class Node extends Model
      * 通过url查找节点信息
      * @param $id
      * @return array|mixed|null|\PDOStatement|string|Model
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getNodeById($id)
     {
@@ -121,7 +121,7 @@ class Node extends Model
      * 循环节点id，获取节点信息
      * @param array $ids
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function idsToNode(array $ids)
     {
@@ -141,7 +141,7 @@ class Node extends Model
      * @param int $f_id 当前节点顶级父级id
      * @param int $node_id 当前节点id
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function showNodes(array $ids, $f_id, $node_id)
     {
@@ -177,7 +177,7 @@ class Node extends Model
      * 查找最顶级导航id
      * @param $id
      * @return int|mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function topNodeId($id)
     {
@@ -196,7 +196,7 @@ class Node extends Model
      * @param $list
      * @param  array $checked
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function listToTree($list, $checked)
     {
@@ -216,7 +216,7 @@ class Node extends Model
      * 获取当前节点的父级导航路径
      * @param $id
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getNodeRoad($id)
     {

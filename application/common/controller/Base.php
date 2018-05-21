@@ -26,7 +26,7 @@ class Base extends Controller
      * @param $info
      * @param $data
      * @param $url
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function ajaxReturn($code, $info, $data, $url)
     {
@@ -49,7 +49,7 @@ class Base extends Controller
      * @param string $info
      * @param $data
      * @param $url
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function ajaxSuccess($info = '操作成功', $data = [], $url = '')
     {
@@ -69,7 +69,7 @@ class Base extends Controller
      * @param string $info
      * @param $data
      * @param $url
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function ajaxError($info = '操作失败', $data = [], $url = '')
     {

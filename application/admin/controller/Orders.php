@@ -34,7 +34,7 @@ class Orders extends Admin
 
     /**
      * 用户积分策略
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function integer()
     {

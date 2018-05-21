@@ -34,7 +34,7 @@ class Users extends Validate
      * 验证手机号码
      * @param $value
      * @return string
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     protected function phone($value)
     {

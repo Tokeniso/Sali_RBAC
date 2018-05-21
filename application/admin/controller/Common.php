@@ -20,7 +20,7 @@ class Common extends Base
 
     /**
      * 清空数据缓存
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function clearCache()
     {
@@ -29,7 +29,7 @@ class Common extends Base
 
     /**
      * 清空session
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function logout()
     {
@@ -40,7 +40,7 @@ class Common extends Base
     /**
      * 登录界面/登录
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function login()
     {
@@ -69,7 +69,7 @@ class Common extends Base
     /**
      * 验证码
      * @return \think\response\Json
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function verify()
     {

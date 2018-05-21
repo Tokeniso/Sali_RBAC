@@ -57,7 +57,7 @@ class Admin extends Common
     /**
      * 系统页面
      * @return mixed
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public function index()
     {

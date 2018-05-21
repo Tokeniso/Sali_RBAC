@@ -15,7 +15,7 @@ class Role extends Model
     /**
      * 权限组列表
      * @return array|\PDOStatement|string|\think\Collection
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function listRole()
     {
@@ -28,7 +28,7 @@ class Role extends Model
      * 通过id查找权限组
      * @param $id
      * @return array|null|\PDOStatement|string|Model
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getRoleById($id)
     {

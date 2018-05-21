@@ -18,7 +18,7 @@ class Map extends Model
      * @param $role_id
      * @param $uid
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getAllowNode($role_id, $uid) : array
     {
@@ -39,7 +39,7 @@ class Map extends Model
      * 获取权限组节点
      * @param $role_id
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getRoleNode($role_id) : array
     {
@@ -56,7 +56,7 @@ class Map extends Model
      * 获取用户自定义节点
      * @param $uid
      * @return array
-     * @author szh
+     * @author szh <sali_hub@163.com>
      */
     public static function getUserNode($uid) : array
     {
