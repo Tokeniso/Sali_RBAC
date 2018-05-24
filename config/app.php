@@ -142,7 +142,7 @@ return [
         //服务器端口
         'smtp_port' => '465',
         //服务器用户名
-        'smtp_user' => 'szh199307@163.com',
+        'smtp_user' => 'sali_hub@163.com',
         //服务器授权密码
         'smtp_pwd' => 'secret',
         //用户昵称
